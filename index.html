@@ -1,131 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <!-- Custom PreHead code is injected here -->
-    
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name ="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta charset="utf-8"/>
+    <!-- Mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-        <!-- Builtin injector for disabling cache -->
-        <meta http-equiv="pragma" content="no-cache"/>
+    <!-- Mobile web app -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        <!-- Set the title bar of the page -->
-        <title>demo</title>
+    <meta charset="utf-8" />
 
-        <!-- Custom PreStyle code is injected here -->
-        
+    <!-- Disable cache -->
+    <meta http-equiv="pragma" content="no-cache" />
 
-        <!-- Set the background colour of the document -->
-        <style>
-            body {
-                background: #0;
-                color: #cccccc;
-                margin: 0px;
-                padding: 0px;
-                border: 0px;
+    <title>demo</title>
+
+    <style>
+        html,
+        body {
+            background: #000;
+            color: #cccccc;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            inset: 0;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            display: block;
+        }
+
+        div.gm4html5_div_class {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        #gm4html5_div_id {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 720px;
+            height: 1280px;
+            transform-origin: center center;
+            background: #000;
+            overflow: hidden;
+        }
+
+        #canvas {
+            display: block;
+            width: 720px;
+            height: 1280px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: #000;
+
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+
+            -ms-touch-action: none;
+            touch-action: none;
+        }
+
+        :-webkit-full-screen #canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        :-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        div.gm4html5_login {
+            padding: 20px;
+            position: absolute;
+            border: solid 2px #000000;
+            background-color: #404040;
+            color: #00ff00;
+            border-radius: 15px;
+            box-shadow: #101010 20px 20px 40px;
+        }
+
+        div.gm4html5_cancel_button {
+            float: right;
+        }
+
+        div.gm4html5_login_button {
+            float: left;
+        }
+
+        div.gm4html5_login_header {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gm4html5_div_class" id="gm4html5_div_id">
+        <canvas id="canvas" width="720" height="1280">
+            <p>Your browser doesn't support HTML5 canvas.</p>
+        </canvas>
+    </div>
+
+    <script type="text/javascript" src="html5game/demo.js?cachebust=1077487248"></script>
+
+    <script>
+        const GAME_WIDTH = 720;
+        const GAME_HEIGHT = 1280;
+
+        function resizeGameCanvas() {
+            const gameDiv = document.getElementById("gm4html5_div_id");
+            const canvas = document.getElementById("canvas");
+
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // contain 模式：完整显示，不裁切
+            const scale = Math.min(windowWidth / GAME_WIDTH, windowHeight / GAME_HEIGHT);
+
+            gameDiv.style.transform = "translate(-50%, -50%) scale(" + scale + ")";
+
+            canvas.style.width = GAME_WIDTH + "px";
+            canvas.style.height = GAME_HEIGHT + "px";
+        }
+
+        window.addEventListener("resize", resizeGameCanvas);
+
+        window.addEventListener("orientationchange", function () {
+            setTimeout(resizeGameCanvas, 300);
+        });
+
+        document.addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        }, { passive: false });
+
+        window.onload = function () {
+            resizeGameCanvas();
+
+            if (typeof GameMaker_Init === "function") {
+                GameMaker_Init();
+            } else {
+                console.error("GameMaker_Init is not defined. Please check html5game/demo.js path.");
             }
+        };
+    </script>
+</body>
 
-            canvas {
-                image-rendering: optimizeSpeed;
-                -webkit-interpolation-mode: nearest-neighbor;
-                -ms-touch-action: none;
-                touch-action: none;
-                margin: 0px;
-                padding: 0px;
-                border: 0px;
-            }
-            :-webkit-full-screen #canvas {
-                width: 100%;
-                height: 100%;
-            }
-            :-webkit-full-screen {
-                width: 100%;
-                height: 100%;
-            }
-            
-            /* Custom Runner Styles */
-            div.gm4html5_div_class {
-                margin: 0px;
-                padding: 0px;
-                border: 0px;
-            }
-            div.gm4html5_login {
-                padding: 20px;
-                position: absolute;
-                border: solid 2px #000000;
-                background-color: #404040;
-                color:#00ff00;
-                border-radius: 15px;
-                box-shadow: #101010 20px 20px 40px;
-            }
-            div.gm4html5_cancel_button {
-                float: right;
-            }
-            div.gm4html5_login_button {
-                float: left;
-            }
-            div.gm4html5_login_header {
-                text-align: center;
-            }
-            /* END - Custom Runner Styles */
-            
-        </style>
-
-        <!-- Custom PostStyle code is injected here -->
-        
-
-        <!-- Builtin injector for injecting flurry analytics code -->
-        
-    </head>
-
-    <!-- Custom PostHead code is injected here -->
-    
-
-    <!-- Custom PreBody code is injected here -->
-    
-
-    <body>
-        <!-- Custom BodyStart code is injected here -->
-        
-
-        <div class="gm4html5_div_class" id="gm4html5_div_id">
-            
-            <!-- Builtin injector for splash screen -->
-            
-
-            <!-- Custom PreCanvas code is injected here -->
-            
-
-            <!-- Create the canvas element the game draws to -->
-            <canvas id="canvas" width="720" height="1280" >
-                
-                <p>Your browser doesn't support HTML5 canvas.</p>
-            </canvas>
-            
-            <!-- Custom PostCanvas code is injected here -->
-            
-        </div>
-
-        <!-- Run the game code -->
-        <script type="text/javascript" src="html5game/demo.js?cachebust=1077487248"></script>
-
-        <!-- Builtin injector for injecting runner path -->
-        
-
-        <script>window.onload = GameMaker_Init;</script>
-
-        <!-- Builtin injector for injecting google analytics code -->
-        
-
-        <!-- Custom BodyEnd code is injected here -->
-        
-    </body>
-
-    <!-- Custom PostBody code is injected here -->
-    
 </html>
