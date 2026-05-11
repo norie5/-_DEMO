@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=720, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <title>game</title>
+
+    <style>
+        html,
+        body {
+            background: #000;
+            color: #cccccc;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            width: 720px;
+            height: 1280px;
+            overflow: hidden;
+
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: none;
+        }
+
+        #gm4html5_div_id {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 720px;
+            height: 1280px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: #000;
+            overflow: hidden;
+        }
+
+        #canvas {
+            display: block;
+            width: 720px;
+            height: 1280px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: #000;
+
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+
+            touch-action: none;
+            -ms-touch-action: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gm4html5_div_class" id="gm4html5_div_id">
+        <canvas id="canvas" width="720" height="1280">
+            <p>Your browser doesn't support HTML5 canvas.</p>
+        </canvas>
+    </div>
+
+    <script>
+        function loadGameMakerScript() {
+            var script = document.createElement("script");
+            script.src = "html5game/demo.js?v=" + Date.now();
+
+            script.onload = function () {
+                if (typeof GameMaker_Init === "function") {
+                    GameMaker_Init();
+                } else {
+                    console.error("GameMaker_Init is not defined.");
+                }
+            };
+
+            script.onerror = function () {
+                console.error("Failed to load html5game/demo.js");
+            };
+
+            document.body.appendChild(script);
+        }
+
+        document.addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        }, { passive: false });
+
+        window.onload = function () {
+            loadGameMakerScript();
+        };
+    </script>
+</body>
+
+</html>
