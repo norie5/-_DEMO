@@ -31,8 +31,6 @@
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
-
-            touch-action: none;
         }
 
         body {
@@ -51,8 +49,11 @@
 
         #gm4html5_div_id {
             position: absolute;
+            width: 720px;
+            height: 1280px;
             left: 0;
             top: 0;
+            transform-origin: top left;
             background: #000;
             overflow: hidden;
             margin: 0;
@@ -62,6 +63,8 @@
 
         #canvas {
             display: block;
+            width: 720px;
+            height: 1280px;
             margin: 0;
             padding: 0;
             border: 0;
@@ -97,7 +100,6 @@
         const GAME_WIDTH = 720;
         const GAME_HEIGHT = 1280;
 
-        // 平台跳跃游戏推荐 contain：完整显示，不裁切
         const FIT_MODE = "contain";
 
         function getRealViewport() {
@@ -121,7 +123,6 @@
         function resizeGameCanvas() {
             const wrapper = document.getElementById("game-wrapper");
             const gameDiv = document.getElementById("gm4html5_div_id");
-            const canvas = document.getElementById("canvas");
 
             const vp = getRealViewport();
 
@@ -141,24 +142,22 @@
                 scale = Math.min(scaleX, scaleY);
             }
 
-            const drawW = Math.floor(GAME_WIDTH * scale);
-            const drawH = Math.floor(GAME_HEIGHT * scale);
+            const drawW = GAME_WIDTH * scale;
+            const drawH = GAME_HEIGHT * scale;
 
-            const offsetX = Math.floor((vp.width - drawW) * 0.5);
-            const offsetY = Math.floor((vp.height - drawH) * 0.5);
+            const offsetX = (vp.width - drawW) * 0.5;
+            const offsetY = (vp.height - drawH) * 0.5;
 
-            // 关键：不用 transform，而是直接设置显示尺寸
             gameDiv.style.left = offsetX + "px";
             gameDiv.style.top = offsetY + "px";
-            gameDiv.style.width = drawW + "px";
-            gameDiv.style.height = drawH + "px";
+            gameDiv.style.transform = "scale(" + scale + ")";
 
-            canvas.style.width = drawW + "px";
-            canvas.style.height = drawH + "px";
-
-            // 保持 canvas 内部逻辑分辨率不变
-            canvas.width = GAME_WIDTH;
-            canvas.height = GAME_HEIGHT;
+            // 暴露给调试用
+            window.__gm_scale = scale;
+            window.__gm_offset_x = offsetX;
+            window.__gm_offset_y = offsetY;
+            window.__gm_view_w = vp.width;
+            window.__gm_view_h = vp.height;
         }
 
         function forceResize() {
@@ -179,6 +178,7 @@
             window.visualViewport.addEventListener("scroll", forceResize);
         }
 
+        // 只阻止页面滚动，不阻止 canvas 自己接收 touch / click
         document.addEventListener("touchmove", function (event) {
             event.preventDefault();
         }, { passive: false });
