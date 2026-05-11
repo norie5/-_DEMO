@@ -72,6 +72,20 @@
             const script = document.createElement("script");
             script.src = "html5game/demo.js?v=" + Date.now();
 
+<<<<<<< HEAD
+            <!-- Create the canvas element the game draws to -->
+            <canvas id="canvas" width="720" height="1280" style="position: absolute; top: 50%; left: 50%; bottom: -50%; right: -50%; transform: translate(-50%, -50%);">
+                
+                <p>Your browser doesn't support HTML5 canvas.</p>
+            </canvas>
+            
+            <!-- Custom PostCanvas code is injected here -->
+            
+        </div>
+
+        <!-- Run the game code -->
+        <script type="text/javascript" src="html5game/demo.js?cachebust=1210094461"></script>
+=======
             script.onload = function () {
                 if (typeof GameMaker_Init === "function") {
                     GameMaker_Init();
@@ -83,6 +97,7 @@
             script.onerror = function () {
                 console.error("Failed to load html5game/demo.js");
             };
+>>>>>>> 5a33ab5adbdc3886c3cdf3e07f7da10479b5cdb2
 
             document.body.appendChild(script);
         }
