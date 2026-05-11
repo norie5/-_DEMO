@@ -31,6 +31,7 @@
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
+
             touch-action: none;
         }
 
@@ -44,27 +45,23 @@
             position: fixed;
             left: 0;
             top: 0;
-            width: 100px;
-            height: 100px;
             overflow: hidden;
             background: #000;
         }
 
         #gm4html5_div_id {
             position: absolute;
-            width: 720px;
-            height: 1280px;
             left: 0;
             top: 0;
-            transform-origin: center center;
             background: #000;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
+            border: 0;
         }
 
         #canvas {
             display: block;
-            width: 720px;
-            height: 1280px;
             margin: 0;
             padding: 0;
             border: 0;
@@ -100,7 +97,7 @@
         const GAME_WIDTH = 720;
         const GAME_HEIGHT = 1280;
 
-        // contain：完整显示，不裁切。平台跳跃游戏推荐这个。
+        // 平台跳跃游戏推荐 contain：完整显示，不裁切
         const FIT_MODE = "contain";
 
         function getRealViewport() {
@@ -128,7 +125,6 @@
 
             const vp = getRealViewport();
 
-            // 关键：wrapper 尺寸直接等于 Safari 当前可见区域
             wrapper.style.left = vp.left + "px";
             wrapper.style.top = vp.top + "px";
             wrapper.style.width = vp.width + "px";
@@ -145,18 +141,24 @@
                 scale = Math.min(scaleX, scaleY);
             }
 
-            const drawW = GAME_WIDTH * scale;
-            const drawH = GAME_HEIGHT * scale;
+            const drawW = Math.floor(GAME_WIDTH * scale);
+            const drawH = Math.floor(GAME_HEIGHT * scale);
 
-            const x = (vp.width - drawW) * 0.5;
-            const y = (vp.height - drawH) * 0.5;
+            const offsetX = Math.floor((vp.width - drawW) * 0.5);
+            const offsetY = Math.floor((vp.height - drawH) * 0.5);
 
-            gameDiv.style.left = x + "px";
-            gameDiv.style.top = y + "px";
-            gameDiv.style.transform = "scale(" + scale + ")";
+            // 关键：不用 transform，而是直接设置显示尺寸
+            gameDiv.style.left = offsetX + "px";
+            gameDiv.style.top = offsetY + "px";
+            gameDiv.style.width = drawW + "px";
+            gameDiv.style.height = drawH + "px";
 
-            canvas.style.width = GAME_WIDTH + "px";
-            canvas.style.height = GAME_HEIGHT + "px";
+            canvas.style.width = drawW + "px";
+            canvas.style.height = drawH + "px";
+
+            // 保持 canvas 内部逻辑分辨率不变
+            canvas.width = GAME_WIDTH;
+            canvas.height = GAME_HEIGHT;
         }
 
         function forceResize() {
