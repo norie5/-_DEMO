@@ -35,22 +35,17 @@
         }
 
         body {
-            position: fixed;
-            inset: 0;
             background: #000;
         }
 
-        #gm4html5_div_id {
-            position: fixed;
+        div.gm4html5_div_class {
             margin: 0;
             padding: 0;
             border: 0;
             background: #000;
-            overflow: hidden;
         }
 
-        #canvas {
-            display: block;
+        canvas {
             margin: 0;
             padding: 0;
             border: 0;
@@ -61,12 +56,6 @@
 
             touch-action: none;
             -ms-touch-action: none;
-        }
-
-        div.gm4html5_div_class {
-            margin: 0;
-            padding: 0;
-            border: 0;
         }
     </style>
 </head>
@@ -79,93 +68,16 @@
     </div>
 
     <script>
-        const GAME_WIDTH = 720;
-        const GAME_HEIGHT = 1280;
-
-        function getViewport() {
-            if (window.visualViewport) {
-                return {
-                    width: window.visualViewport.width,
-                    height: window.visualViewport.height,
-                    left: window.visualViewport.offsetLeft,
-                    top: window.visualViewport.offsetTop
-                };
-            }
-
-            return {
-                width: window.innerWidth,
-                height: window.innerHeight,
-                left: 0,
-                top: 0
-            };
-        }
-
-        function resizeGame() {
-            const vp = getViewport();
-
-            const gameDiv = document.getElementById("gm4html5_div_id");
-            const canvas = document.getElementById("canvas");
-
-            const scaleX = vp.width / GAME_WIDTH;
-            const scaleY = vp.height / GAME_HEIGHT;
-
-            // contain：完整显示，不裁切
-            const scale = Math.min(scaleX, scaleY);
-
-            const drawW = Math.floor(GAME_WIDTH * scale);
-            const drawH = Math.floor(GAME_HEIGHT * scale);
-
-            const offsetX = Math.floor(vp.left + (vp.width - drawW) * 0.5);
-            const offsetY = Math.floor(vp.top + (vp.height - drawH) * 0.5);
-
-            gameDiv.style.left = offsetX + "px";
-            gameDiv.style.top = offsetY + "px";
-            gameDiv.style.width = drawW + "px";
-            gameDiv.style.height = drawH + "px";
-
-            canvas.style.width = drawW + "px";
-            canvas.style.height = drawH + "px";
-
-            // 不改 canvas.width / canvas.height
-            // 让 GameMaker 内部仍然保持 720×1280
-        }
-
-        function forceResize() {
-            resizeGame();
-
-            setTimeout(resizeGame, 100);
-            setTimeout(resizeGame, 300);
-            setTimeout(resizeGame, 600);
-            setTimeout(resizeGame, 1000);
-        }
-
-        window.addEventListener("resize", forceResize);
-        window.addEventListener("orientationchange", forceResize);
-
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener("resize", forceResize);
-            window.visualViewport.addEventListener("scroll", forceResize);
-        }
-
-        document.addEventListener("touchmove", function (event) {
-            event.preventDefault();
-        }, { passive: false });
-
         function loadGame() {
             const script = document.createElement("script");
             script.src = "html5game/demo.js?v=" + Date.now();
 
             script.onload = function () {
-                forceResize();
-
                 if (typeof GameMaker_Init === "function") {
                     GameMaker_Init();
                 } else {
                     console.error("GameMaker_Init is not defined.");
                 }
-
-                setTimeout(forceResize, 500);
-                setTimeout(forceResize, 1200);
             };
 
             script.onerror = function () {
@@ -175,8 +87,11 @@
             document.body.appendChild(script);
         }
 
+        document.addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        }, { passive: false });
+
         window.onload = function () {
-            forceResize();
             loadGame();
         };
     </script>
