@@ -1,131 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="utf-8" />
 
-    <!-- Custom PreHead code is injected here -->
-    
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
-    <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name ="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        <!-- Builtin injector for disabling cache -->
-        <meta http-equiv="pragma" content="no-cache"/>
+    <title>demo</title>
 
-        <!-- Set the title bar of the page -->
-        <title>demo</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
 
-        <!-- Custom PreStyle code is injected here -->
-        
+        body {
+            position: fixed;
+            inset: 0;
+            background: #000;
+        }
 
-        <!-- Set the background colour of the document -->
-        <style>
-            body {
-                background: #0;
-                color: #cccccc;
-                margin: 0px;
-                padding: 0px;
-                border: 0px;
+        #game-frame {
+            position: fixed;
+            width: 720px;
+            height: 1280px;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            background: #000;
+            transform-origin: top left;
+        }
+    </style>
+</head>
+
+<body>
+    <iframe
+        id="game-frame"
+        src="game.html"
+        scrolling="no"
+        frameborder="0"
+        allow="fullscreen; autoplay; gamepad">
+    </iframe>
+
+    <script>
+        const GAME_WIDTH = 720;
+        const GAME_HEIGHT = 1280;
+
+        function getViewport() {
+            if (window.visualViewport) {
+                return {
+                    width: window.visualViewport.width,
+                    height: window.visualViewport.height,
+                    left: window.visualViewport.offsetLeft,
+                    top: window.visualViewport.offsetTop
+                };
             }
 
-            canvas {
-                image-rendering: optimizeSpeed;
-                -webkit-interpolation-mode: nearest-neighbor;
-                -ms-touch-action: none;
-                touch-action: none;
-                margin: 0px;
-                padding: 0px;
-                border: 0px;
-            }
-            :-webkit-full-screen #canvas {
-                width: 100%;
-                height: 100%;
-            }
-            :-webkit-full-screen {
-                width: 100%;
-                height: 100%;
-            }
-            
-            /* Custom Runner Styles */
-            div.gm4html5_div_class {
-                margin: 0px;
-                padding: 0px;
-                border: 0px;
-            }
-            div.gm4html5_login {
-                padding: 20px;
-                position: absolute;
-                border: solid 2px #000000;
-                background-color: #404040;
-                color:#00ff00;
-                border-radius: 15px;
-                box-shadow: #101010 20px 20px 40px;
-            }
-            div.gm4html5_cancel_button {
-                float: right;
-            }
-            div.gm4html5_login_button {
-                float: left;
-            }
-            div.gm4html5_login_header {
-                text-align: center;
-            }
-            /* END - Custom Runner Styles */
-            
-        </style>
+            return {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                left: 0,
+                top: 0
+            };
+        }
 
-        <!-- Custom PostStyle code is injected here -->
-        
+        function resizeFrame() {
+            const frame = document.getElementById("game-frame");
+            const vp = getViewport();
 
-        <!-- Builtin injector for injecting flurry analytics code -->
-        
-    </head>
+            const scaleX = vp.width / GAME_WIDTH;
+            const scaleY = vp.height / GAME_HEIGHT;
 
-    <!-- Custom PostHead code is injected here -->
-    
+            // 完整显示，不裁切
+            const scale = Math.min(scaleX, scaleY);
 
-    <!-- Custom PreBody code is injected here -->
-    
+            const drawW = GAME_WIDTH * scale;
+            const drawH = GAME_HEIGHT * scale;
 
-    <body>
-        <!-- Custom BodyStart code is injected here -->
-        
+            const left = vp.left + (vp.width - drawW) * 0.5;
+            const top = vp.top + (vp.height - drawH) * 0.5;
 
-        <div class="gm4html5_div_class" id="gm4html5_div_id">
-            
-            <!-- Builtin injector for splash screen -->
-            
+            frame.style.left = left + "px";
+            frame.style.top = top + "px";
+            frame.style.transform = "scale(" + scale + ")";
+        }
 
-            <!-- Custom PreCanvas code is injected here -->
-            
+        function forceResize() {
+            resizeFrame();
 
-            <!-- Create the canvas element the game draws to -->
-            <canvas id="canvas" width="720" height="1280" style="position: absolute; top: 50%; left: 50%; bottom: -50%; right: -50%; transform: translate(-50%, -50%);">
-                
-                <p>Your browser doesn't support HTML5 canvas.</p>
-            </canvas>
-            
-            <!-- Custom PostCanvas code is injected here -->
-            
-        </div>
+            setTimeout(resizeFrame, 50);
+            setTimeout(resizeFrame, 150);
+            setTimeout(resizeFrame, 300);
+            setTimeout(resizeFrame, 600);
+            setTimeout(resizeFrame, 1000);
+        }
 
+<<<<<<< HEAD
         <!-- Run the game code -->
         <script type="text/javascript" src="html5game/demo.js?cachebust=1689838749"></script>
+=======
+        window.addEventListener("resize", forceResize);
+        window.addEventListener("orientationchange", forceResize);
+>>>>>>> 19a3817afdca1a8f53d2d39ba931e1a47a3b4449
 
-        <!-- Builtin injector for injecting runner path -->
-        
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", forceResize);
+            window.visualViewport.addEventListener("scroll", forceResize);
+        }
 
-        <script>window.onload = GameMaker_Init;</script>
+        document.addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        }, { passive: false });
 
-        <!-- Builtin injector for injecting google analytics code -->
-        
-
-        <!-- Custom BodyEnd code is injected here -->
-        
-    </body>
-
-    <!-- Custom PostBody code is injected here -->
-    
+        window.onload = forceResize;
+    </script>
+</body>
 </html>
